@@ -14,7 +14,7 @@ def draw_player(x_pos, y_pos):
 
 
 RUN = True
-x, y = 0, 250
+x, y = 0, 0
 delta_x, delta_y = 0, 0
 
 while RUN:
