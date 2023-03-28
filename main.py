@@ -11,13 +11,22 @@ screen = py.display.set_mode((screen_width, screen_height))
 clock = py.time.Clock()
 #Function to insert the player on the screen
 def draw_player(x_pos, y_pos):
-    global x
+    global x, y, delta_y
     x += delta_x
+    # player gravity
+    if not player_jumping and y_pos < 250:
+        delta_y += 0.1
+        y += delta_y
+    else: 
+        delta_y = 0
     player_rect = py.image.load('./assets/player_assets/standing.png')
     screen.blit(player_rect, (x_pos, y_pos))
 #Initializing variables for the game
 RUN = True
 x, y = 0, 0
+player_jumping = False
+
+# delta_x = player movement speed, delta_t = gravity
 delta_x, delta_y = 0, 0
 #Game loop
 while RUN:
