@@ -13,12 +13,16 @@ clock = py.time.Clock()
 def draw_player(x_pos, y_pos):
     global x, y, delta_y
     x += delta_x
+    y += delta_y
+    print(delta_y, y)
     # player gravity
-    if not player_jumping and y_pos < 250:
+    if y_pos <= 210:
         delta_y += 0.1
-        y += delta_y
-    else: 
+    
+    if y_pos > 210:
         delta_y = 0
+        y = 210
+
     player_rect = py.image.load('./assets/player_assets/standing.png')
     screen.blit(player_rect, (x_pos, y_pos))
 #Initializing variables for the game
@@ -26,7 +30,7 @@ RUN = True
 x, y = 0, 0
 player_jumping = False
 
-# delta_x = player movement speed, delta_t = gravity
+# delta_x = player movement speed, delta_y = gravity/jumping
 delta_x, delta_y = 0, 0
 #Game loop
 while RUN:
@@ -40,6 +44,11 @@ while RUN:
         if event.type == py.KEYDOWN:
             if event.key == py.K_d:
                 delta_x = 5
+        if event.type == py.KEYDOWN:
+            if event.key == py.K_w:
+                delta_y = 0
+                delta_y -= 5
+         
 
         if event.type == py.KEYUP:
             if event.key == py.K_a:
