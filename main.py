@@ -1,6 +1,7 @@
 import pygame as py
 import time
 import sys
+import math
 from utils import *
 
 py.init()
@@ -9,14 +10,30 @@ screen_width = 800
 screen_height = 500
 screen = py.display.set_mode((screen_width, screen_height))
 clock = py.time.Clock()
+
+# Initializing variables for the game
+
+RUN = True
+x, y = 0, 0
+player_direction = 'right'
+player_run_frames = [py.image.load('./assets/player_assets/run1.png'), py.image.load('./assets/player_assets/run2.png'), py.image.load('./assets/player_assets/run3.png')]
+frame = 0
+
+# delta_x = player movement speed, delta_y = gravity/jumping
+delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
-
-
 def draw_player(x_pos, y_pos):
-    global x, y, delta_y
+    global x, y, delta_y, frame
     x += delta_x
     y += delta_y
-    player_rect = py.image.load('./assets/player_assets/standing.png')
+    frame += 1
+    if frame >= 30:
+        frame = 0
+    if delta_x == 0:
+        player_rect = py.image.load('./assets/player_assets/standing.png')
+    elif delta_x != 0:
+        print(math.floor(frame/10))
+        player_rect = player_run_frames[math.floor(frame/10)]
     player_rect = py.transform.scale_by(player_rect, 2)
 
     # player gravity
@@ -34,14 +51,7 @@ def draw_player(x_pos, y_pos):
     screen.blit(player_rect, (x_pos, y_pos))
 
 
-# Initializing variables for the game
 
-RUN = True
-x, y = 0, 0
-player_direction = 'right'
-
-# delta_x = player movement speed, delta_y = gravity/jumping
-delta_x, delta_y = 0, 0
 # Game loop
 while RUN:
     screen.fill('black')
