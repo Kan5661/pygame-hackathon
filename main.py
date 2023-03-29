@@ -24,11 +24,11 @@ def draw_player(x_pos, y_pos):
         y = 210
 
     player_rect = py.image.load('./assets/player_assets/standing.png')
+    player_rect = py.transform.scale_by(player_rect, 2)
     screen.blit(player_rect, (x_pos, y_pos))
 #Initializing variables for the game
 RUN = True
 x, y = 0, 0
-player_jumping = False
 
 # delta_x = player movement speed, delta_y = gravity/jumping
 delta_x, delta_y = 0, 0
