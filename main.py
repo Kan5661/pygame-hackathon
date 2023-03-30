@@ -3,12 +3,14 @@ import time
 import sys
 import math
 from utils import *
+from map import *
 
 py.init()
 # Initializing the screen and clock
-screen_width = 800
-screen_height = 500
-screen = py.display.set_mode((screen_width, screen_height))
+screen_size = (800, 500)
+screen = py.display.set_mode(screen_size)
+display = py.Surface((400, 250))
+display = py.transform.scale(display, (400, 250))
 clock = py.time.Clock()
 
 # Initializing variables for the game
@@ -38,7 +40,7 @@ def draw_player(x_pos, y_pos):
         player_rect = player_run_frames[math.floor(frame/10)]
     if jump:
         player_rect = py.image.load('assets/player_assets/jumping.png')
-    player_rect = py.transform.scale_by(player_rect, 2)
+    # player_rect = py.transform.scale_by(player_rect, 2)
 
     # player gravity
     if y_pos <= 210:
@@ -53,13 +55,19 @@ def draw_player(x_pos, y_pos):
         player_rect = py.transform.flip(player_rect, flip_x=False, flip_y=False)
     elif player_direction == 'left':
         player_rect = py.transform.flip(player_rect, flip_x=True, flip_y=False)
-    screen.blit(player_rect, (x_pos, y_pos))
+    
+    display.blit(player_rect, (x_pos, y_pos))
 
 
 
 # Game loop
 while RUN:
+    
     screen.fill('black')
+    screen.blit(py.transform.scale(display, screen_size), (0, 0))
+    display.fill('grey')
+    draw_map(display)
+    draw_player(x_pos=x, y_pos=y)
 
     for event in py.event.get():
         if event.type == py.QUIT:
@@ -84,7 +92,6 @@ while RUN:
         if event.type == py.KEYUP:
             if event.key == py.K_d:
                 delta_x = 0
-    draw_player(x_pos=x, y_pos=y)
     py.display.flip()
     clock.tick(60)
 # After the game stop running
