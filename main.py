@@ -7,7 +7,9 @@ from map import *
 
 py.init()
 # Initializing the screen and clock
-screen_size = (800, 500)
+screen_width = 800
+screen_height = 500
+screen_size = (screen_width, screen_height)
 screen = py.display.set_mode(screen_size)
 display = py.Surface((400, 250))
 display = py.transform.scale(display, (400, 250))
@@ -18,9 +20,11 @@ clock = py.time.Clock()
 RUN = True
 x, y = 0, 0
 player_direction = 'right'
-jump_height = 7
+jump_height = -7
 jump = False
 player_run_frames = [py.image.load('./assets/player_assets/run1.png'), py.image.load('./assets/player_assets/run2.png'), py.image.load('./assets/player_assets/run3.png')]
+player_rect = player_run_frames[0].get_rect()
+
 frame = 0
 backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/background/1.png'), py.image.load('assets/background/2.png'), py.image.load('assets/background/3.png'), py.image.load('assets/background/4.png')]
 
@@ -28,35 +32,38 @@ backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/b
 delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
 def draw_player(x_pos, y_pos):
-    global x, y, delta_y, frame, jump
-    x += delta_x
-    y += delta_y
+    global x, y, delta_y, frame, jump, player_rect
     frame += 1
     if frame >= 30:
         frame = 0
     if delta_x == 0:
-        player_rect = py.image.load('./assets/player_assets/standing.png')
+        player_image = py.image.load('./assets/player_assets/standing.png')
     elif delta_x != 0 and not jump:
-        player_rect = player_run_frames[math.floor(frame/10)]
+        player_image = player_run_frames[math.floor(frame/10)]
     if jump:
-        player_rect = py.image.load('assets/player_assets/jumping.png')
-    # player_rect = py.transform.scale_by(player_rect, 2)
+        player_image = py.image.load('assets/player_assets/jumping.png')
 
-    # player gravity
-    if y_pos <= 210:
-        delta_y += 0.3
+    # player_rect.x += x
+    # player_rect.y += y
+    # x += delta_x
+    # y += delta_y
 
-    if y_pos > 210:
-        delta_y = 0
-        jump = False
-        y = 210
+    player_position, collision_test = move(player=player_rect, movement=[delta_x, delta_y])
+
+    # fall speed stop accelerating at 3px/frame
+    delta_y += 0.3
+    if delta_y > 3: 
+        delta_y = 3
+
 
     if player_direction == 'right':
-        player_rect = py.transform.flip(player_rect, flip_x=False, flip_y=False)
+        player_image = py.transform.flip(player_image, flip_x=False, flip_y=False)
     elif player_direction == 'left':
-        player_rect = py.transform.flip(player_rect, flip_x=True, flip_y=False)
+        player_image = py.transform.flip(player_image, flip_x=True, flip_y=False)
+    display.blit(player_image, player_position)
+    # player_rect = player_position
     
-    display.blit(player_rect, (x_pos, y_pos))
+    print(player_position)
 
 
 
@@ -71,19 +78,21 @@ while RUN:
 
     for event in py.event.get():
         if event.type == py.QUIT:
+            py.quit()
+            sys.exit()
             RUN = False
         if event.type == py.KEYDOWN:
             if event.key == py.K_a:
-                delta_x = -5
+                delta_x += -5
                 player_direction = 'left'
         if event.type == py.KEYDOWN:
             if event.key == py.K_d:
-                delta_x = 5
+                delta_x += 5
                 player_direction = 'right'
         if event.type == py.KEYDOWN:
             if event.key == py.K_w:
                 delta_y = 0
-                delta_y -= jump_height
+                delta_y += jump_height
                 jump = True
 
         if event.type == py.KEYUP:
@@ -95,7 +104,8 @@ while RUN:
     py.display.flip()
     clock.tick(60)
 # After the game stop running
-message("Game Over", (255, 0, 0), screen, screen_width, screen_height)
-py.display.update()
-time.sleep(1)
-py.quit()
+# message("Game Over", (255, 0, 0), screen, screen_width, screen_height)
+# py.display.update()
+# time.sleep(1)
+# py.quit()
+# sys.exit()
