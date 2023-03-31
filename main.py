@@ -33,6 +33,8 @@ delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
 def draw_player(x_pos, y_pos):
     global x, y, delta_y, frame, jump, player_rect
+
+    # Player animation and face directions
     frame += 1
     if frame >= 30:
         frame = 0
@@ -43,12 +45,18 @@ def draw_player(x_pos, y_pos):
     if jump:
         player_image = py.image.load('assets/player_assets/jumping.png')
 
+    if player_direction == 'right':
+        player_image = py.transform.flip(player_image, flip_x=False, flip_y=False)
+    elif player_direction == 'left':
+        player_image = py.transform.flip(player_image, flip_x=True, flip_y=False)
+
     # player_rect.x += x
     # player_rect.y += y
     # x += delta_x
     # y += delta_y
 
     player_position, collision_test = move(player=player_rect, movement=[delta_x, delta_y])
+    display.blit(player_image, player_position)
 
     # fall speed stop accelerating at 3px/frame
     delta_y += 0.3
@@ -56,11 +64,6 @@ def draw_player(x_pos, y_pos):
         delta_y = 3
 
 
-    if player_direction == 'right':
-        player_image = py.transform.flip(player_image, flip_x=False, flip_y=False)
-    elif player_direction == 'left':
-        player_image = py.transform.flip(player_image, flip_x=True, flip_y=False)
-    display.blit(player_image, player_position)
     # player_rect = player_position
     
     print(player_position)

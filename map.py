@@ -64,6 +64,8 @@ def move(player, movement):
         elif movement[0] < 0:
             player.left = tile.right
             collision_types['left'] = True
+    if collision_types['top'] == True:
+        movement[1] = 0
     player.y += movement[1]
     for tile in hit_list:
         if movement[1] > 0:
