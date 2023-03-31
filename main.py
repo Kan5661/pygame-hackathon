@@ -7,8 +7,8 @@ from utils import *
 
 py.init()
 # Initializing the screen and clock
-screen_width = 800
-screen_height = 500
+screen_width = 960
+screen_height = 640
 screen = py.display.set_mode((screen_width, screen_height))
 clock = py.time.Clock()
 
@@ -30,21 +30,33 @@ def renderTmxMap( tmx_map ):
     return surface
 tmx_map   = pytmx.load_pygame( "untitled5.tmx", pixelalpha=True )
 map_image = renderTmxMap( tmx_map )
+tmx_map   = pytmx.load_pygame( "untitled5.tmx")
 #-----------------------------COLLISION NOT WORKING WELL---
-def check_collisions(player_rect, tile_rects):
-    for tile_rect in tile_rects:
-        if player_rect.colliderect(tile_rect):
-            return True
-    return False
+#def check_collisions(player_rect, tile_rects)
 # Create a player rect
-player_rect = py.Rect(0, 210, 32, 32)
-# Create a list of tile rects
-tile_rects = []
-for layer in pytmx.util_pygame.load_pygame('untitled5.tmx').visible_layers:
-    if isinstance(layer, pytmx.TiledTileLayer):
-        for x, y, gid in layer:
-                tile_rects.append(py.Rect(x * 32, y * 32, 32, 32))
-
+map_objects = py.sprite.Group()
+player_group= py.sprite.Group()
+player_rect = py.image.load('./assets/player_assets/standing.png')
+player_rect = py.sprite.Sprite()
+player_rect.image = py.Surface((32, 32))
+player_rect.rect = py.Rect(32, 32, 32, 32)
+player_group.add(player_rect)
+for layer in tmx_map.visible_layers:
+    if isinstance(layer, pytmx.TiledObjectGroup):
+        for obj in layer:
+            print(layer)
+            sprite = py.sprite.Sprite()
+            sprite.image = py.Surface((obj.width, obj.height))
+            sprite.rect = py.Rect(obj.x, obj.y, obj.width, obj.height)
+            map_objects.add(sprite)
+#for layer in tmx_map.visible_layers:
+'''for x, y, gid in tmx_map.layers[0].data:
+        tile = py.sprite.Sprite()
+        tile.image = tmx_map.get_tile_image_by_gid(gid)
+        tile.rect = tile.image.get_rect()
+        tile.rect.x = x * tmx_map.tilewidth
+        tile.rect.y = y * tmx_map.tileheight
+        map_objects.add(tile)'''
 #-----------------------------COLLISION NOT WORKING WELL---
 
 # Initializing variables for the game
@@ -60,6 +72,7 @@ backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/b
 # delta_x = player movement speed, delta_y = gravity/jumping
 delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
+sprite1 = py.sprite.Sprite()
 def draw_player(player_rect, x_pos, y_pos):
     global x, y, delta_y, frame, jump
     x += delta_x
@@ -113,7 +126,9 @@ while RUN:
                 delta_x = 0
     screen.blit(map_image, (0, 0))
     draw_player(player_rect, x_pos=x, y_pos=y)
-    if check_collisions(player_rect, tile_rects):
+    player_group.update()
+    map_objects.update()
+    if (py.sprite.groupcollide(player_group, map_objects, False, False)):
         print('Collision detected!')
     py.display.flip()
     clock.tick(60)
