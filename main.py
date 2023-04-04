@@ -32,7 +32,7 @@ backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/b
 delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
 def draw_player(x_pos, y_pos):
-    global x, y, delta_y, frame, jump, player_rect
+    global x, y, delta_y, frame, jump, player_rect, counter
 
     # Player animation and face directions
     frame += 1
@@ -50,14 +50,33 @@ def draw_player(x_pos, y_pos):
     elif player_direction == 'left':
         player_image = py.transform.flip(player_image, flip_x=True, flip_y=False)
     player_position, collision = move(tile_rects, player=player_rect, movement=[delta_x, delta_y])
-    display.blit(player_image, player_position)
-
+    #Moving bird in the screen and displaying it
+    if (counter == 50):
+        bird_position.x -= 1
+        counter = 0
+    else:
+        counter+=1
+    display.blit(bird_image, bird_position)
+    if (bird_position.x <= player_position.x):
+        message("You won", (255, 0, 0), screen, screen_width, screen_height)
+        py.display.update()
+        time.sleep(1)
+        py.quit()
+        sys.exit()
     # fall speed stop accelerating at 3px/frame
+    display.blit(player_image, player_position)
     delta_y += 0.3
     if delta_y > 3:
         delta_y = 3
 map_x = 0
 i = 0
+# Init bird
+global bird_position, bird_image, counter
+counter = 0
+bird_image = py.image.load('assets/player_assets/yellowbird2.png')
+bird_position = bird_image.get_rect()
+bird_position.x = screen_width /3
+bird_position.y = 80
 # Game loop
 while RUN:
     screen.fill('black')
@@ -108,6 +127,7 @@ while RUN:
         message("Game Over", (255, 0, 0), screen, screen_width, screen_height)
         py.display.update()
         time.sleep(1)
+        py.quit()
         sys.exit()
     py.display.flip()
     clock.tick(60)
