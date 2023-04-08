@@ -57,7 +57,7 @@ def draw_player(x_pos, y_pos):
     else:
         counter+=1
     display.blit(bird_image, bird_position)
-    if (bird_position.x <= player_position.x):
+    if (abs(bird_position.x - player_position.x )< 15 and abs(bird_position.y - player_position.y )< 10):
         message("You won", (255, 0, 0), screen, screen_width, screen_height)
         py.display.update()
         time.sleep(1)
