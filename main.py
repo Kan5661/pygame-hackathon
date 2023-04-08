@@ -56,13 +56,16 @@ def draw_player(x_pos, y_pos):
     # y += delta_y
 
     player_position, collision_test = move(player=player_rect, movement=[delta_x, delta_y])
-    display.blit(player_image, player_position)
 
     # fall speed stop accelerating at 3px/frame
     delta_y += 0.3
     if delta_y > 3: 
         delta_y = 3
+    
+    if collision_test['bottom'] == True:
+        delta_y = 0
 
+    display.blit(player_image, player_position)
 
     # player_rect = player_position
     

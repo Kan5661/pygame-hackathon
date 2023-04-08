@@ -66,10 +66,11 @@ def move(player, movement):
             collision_types['left'] = True
     if collision_types['top'] == True:
         movement[1] = 0
+    
     player.y += movement[1]
     for tile in hit_list:
         if movement[1] > 0:
-            player.bottom = tile.top
+            player.bottom = tile.top + 1
             collision_types['bottom'] = True
             delta_y = 0
         elif movement[1] < 0:
