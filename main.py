@@ -20,6 +20,7 @@ ALIVE = True
 while ALIVE:
  RUN = True
  x, y = 0, 0
+ points = 0
  player_direction = 'right'
  jump_height = -7
  jump = False
@@ -80,7 +81,6 @@ while ALIVE:
  bird_position.y = 80
 # Game loop
  while RUN:
-
     screen.fill('black')
     screen.blit(py.transform.scale(display, screen_size), (0, 0))
     display.fill('grey')
@@ -135,5 +135,9 @@ while ALIVE:
             else :
              py.quit()
              sys.exit()
+    else:
+        message("Points:", (255, 120, 150), screen, 200, 0)
+        message(str(points), (255, 120, 150), screen, 500, 0)
+        points+=1
     py.display.flip()
     clock.tick(60)
