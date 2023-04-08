@@ -16,22 +16,23 @@ display = py.transform.scale(display, (400, 250))
 clock = py.time.Clock()
 
 # Initializing variables for the game
+ALIVE = True
+while ALIVE:
+ RUN = True
+ x, y = 0, 0
+ player_direction = 'right'
+ jump_height = -7
+ jump = False
+ player_run_frames = [py.image.load('./assets/player_assets/run1.png'), py.image.load('./assets/player_assets/run2.png'), py.image.load('./assets/player_assets/run3.png')]
+ player_rect = player_run_frames[0].get_rect()
 
-RUN = True
-x, y = 0, 0
-player_direction = 'right'
-jump_height = -7
-jump = False
-player_run_frames = [py.image.load('./assets/player_assets/run1.png'), py.image.load('./assets/player_assets/run2.png'), py.image.load('./assets/player_assets/run3.png')]
-player_rect = player_run_frames[0].get_rect()
-
-frame = 0
-backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/background/1.png'), py.image.load('assets/background/2.png'), py.image.load('assets/background/3.png'), py.image.load('assets/background/4.png')]
+ frame = 0
+ backgrounds = [py.image.load('assets/background/0.png'), py.image.load('assets/background/1.png'), py.image.load('assets/background/2.png'), py.image.load('assets/background/3.png'), py.image.load('assets/background/4.png')]
 
 # delta_x = player movement speed, delta_y = gravity/jumping
-delta_x, delta_y = 0, 0
+ delta_x, delta_y = 0, 0
 # Function to insert the player on the screen
-def draw_player(x_pos, y_pos):
+ def draw_player(x_pos, y_pos):
     global x, y, delta_y, frame, jump, player_rect, counter
 
     # Player animation and face directions
@@ -68,17 +69,17 @@ def draw_player(x_pos, y_pos):
     delta_y += 0.3
     if delta_y > 3:
         delta_y = 3
-map_x = 0
-i = 0
-# Init bird
-global bird_position, bird_image, counter
-counter = 0
-bird_image = py.image.load('assets/player_assets/yellowbird2.png')
-bird_position = bird_image.get_rect()
-bird_position.x = screen_width /3
-bird_position.y = 80
+ map_x = 0
+ i = 0
+ # Init bird
+ global bird_position, bird_image, counter
+ counter = 0
+ bird_image = py.image.load('assets/player_assets/yellowbird2.png')
+ bird_position = bird_image.get_rect()
+ bird_position.x = screen_width /3
+ bird_position.y = 80
 # Game loop
-while RUN:
+ while RUN:
 
     screen.fill('black')
     screen.blit(py.transform.scale(display, screen_size), (0, 0))
@@ -125,16 +126,14 @@ while RUN:
     move_map_x(display, map_x, tile_rects)
     draw_player(x_pos=x, y_pos=y)
     if (player_rect.x <0 or player_rect.y > screen_height/2):
-        message("Game Over", (255, 0, 0), screen, screen_width, screen_height)
+        message("Game Over Press Enter to Restart", (255, 0, 0), screen, screen_width/2, screen_height)
         py.display.update()
-        time.sleep(1)
-        py.quit()
-        sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                RUN = False
+                break
+            else :
+             py.quit()
+             sys.exit()
     py.display.flip()
     clock.tick(60)
-# After the game stop running
-# message("Game Over", (255, 0, 0), screen, screen_width, screen_height)
-# py.display.update()
-# time.sleep(1)
-# py.quit()
-# sys.exit()
