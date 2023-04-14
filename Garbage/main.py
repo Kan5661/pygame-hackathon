@@ -1,12 +1,18 @@
 import pygame
 import sys
 from utils import *
+import random
 
 pygame.init()
 clock = pygame.time.Clock()
 
 screen_size = [screen_width, screen_height] = [800, 500]
 screen = pygame.display.set_mode(screen_size)
+
+# Event timer
+SPAWN_BOULDER = pygame.USEREVENT
+pygame.time.set_timer(SPAWN_BOULDER, 4000)  # Trigger spawn boulder event every 4 seconds
+
 
 # Create surfaces/images and rect
 menu_screen = pygame.image.load('assets/menu_background.png')
@@ -34,6 +40,9 @@ pygame.Surface.set_colorkey(turtle_seeking, (255, 255, 255))
 pygame.Surface.set_colorkey(turtle_found, (255, 255, 255))
 turtle_rect, turtle_rect.x, turtle_rect.y = turtle_seeking.get_rect(), 0, 0
 
+boulder_img = pygame.image.load('assets/boulder.png')
+pygame.Surface.set_colorkey(boulder_img, (255, 255, 255))
+
 
 def draw_player():
     display.blit(player, player_rect)
@@ -44,6 +53,28 @@ def draw_player():
 def draw_turtle(turtle_img):
     turtle_rect.y = player_rect.y - turtle_rect.h / 2
     display.blit(turtle_img, turtle_rect)
+
+
+def create_boulder():
+    random.shuffle(boulder_spawn_locations)
+    number_of_boulders_to_spawn = random.randint(2, 4)
+
+    for i in range(number_of_boulders_to_spawn):
+        boulder_rect = boulder_img.get_rect()
+        boulder_rect.y = boulder_spawn_locations[i]
+        boulder_rect.x = 500
+        boulder_rects.append(boulder_rect)
+
+
+def draw_boulders():
+    # Move boulders
+    for boulder in boulder_rects:
+        boulder.x -= GAME_SPEED
+
+    # Draw boulder
+    for boulder_position in boulder_rects:
+        display.blit(boulder_img, boulder_position)
+    print(boulder_rects)
 
 
 def player_collision_turtle():
@@ -77,6 +108,8 @@ def move_bg():
 GAME_SPEED = 1
 player_mov_x, player_mov_y, player_speed = 0, 0, 1
 turtle = turtle_seeking
+boulder_rects = []
+boulder_spawn_locations = [0, 50, 100, 150, 200, 250]
 
 
 while RUN:
@@ -106,6 +139,7 @@ while RUN:
         display.blit(game_bg, game_bg_rect)
         draw_turtle(turtle_img=turtle)
         draw_player()
+        draw_boulders()
         move_bg()
         player_collision_turtle()
         g1pause()
@@ -119,6 +153,10 @@ while RUN:
                 pygame.quit()
                 sys.exit()
                 RUN = False
+
+            if event.type == SPAWN_BOULDER:
+                create_boulder()
+
             if event.type == pygame.KEYDOWN and not G1PAUSE:
                 if event.key == pygame.K_a:
                     player_mov_x = -player_speed
