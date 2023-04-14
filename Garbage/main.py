@@ -62,7 +62,7 @@ def create_boulder():
     for i in range(number_of_boulders_to_spawn):
         boulder_rect = boulder_img.get_rect()
         boulder_rect.y = boulder_spawn_locations[i]
-        boulder_rect.x = 500
+        boulder_rect.x = random.randrange(500, 800, 50)
         boulder_rects.append(boulder_rect)
 
 
@@ -74,17 +74,27 @@ def draw_boulders():
     # Draw boulder
     for boulder_position in boulder_rects:
         display.blit(boulder_img, boulder_position)
+    
+    # Remove off screen  boulders
+    for boulder in boulder_rects:
+        if boulder.x < -50:
+            boulder_rects.remove(boulder)
     print(boulder_rects)
 
 
-def player_collision_turtle():
-    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE
+def player_collision():
+    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects
     if player_rect.colliderect(turtle_rect):
         turtle = turtle_found
         G1PAUSE = True
+        GAME_SPEED = 0
         # MENU = True
         # GAME1 = False
         # player_rect.x, player_rect.y = 150, 110
+
+    if player_rect.collidelist(boulder_rects) != -1:
+        
+        player_rect.right = boulder_rects[player_rect.collidelist(boulder_rects)].left
 
 
 def g1pause():
@@ -141,7 +151,7 @@ while RUN:
         draw_player()
         draw_boulders()
         move_bg()
-        player_collision_turtle()
+        player_collision()
         g1pause()
 
         display = pygame.transform.scale(display, (800, 500))
@@ -183,10 +193,14 @@ while RUN:
                 MENU = True
                 turtle = turtle_seeking
                 player_rect.x, player_rect.y = 150, 110
+                GAME_SPEED = 1
+                boulder_rects = []
             if pause_play_rect.collidepoint((mouse_x_pos / 2, mouse_y_pos / 2)) and event.type == pygame.MOUSEBUTTONDOWN and G1PAUSE:
                 turtle = turtle_seeking
                 player_rect.x, player_rect.y = 150, 110
                 G1PAUSE = False
+                GAME_SPEED = 1
+                boulder_rects = []
 
         clock.tick(120)
         pygame.display.update()
