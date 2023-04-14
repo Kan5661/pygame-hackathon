@@ -13,6 +13,9 @@ screen = pygame.display.set_mode(screen_size)
 SPAWN_BOULDER = pygame.USEREVENT
 pygame.time.set_timer(SPAWN_BOULDER, 4000)  # Trigger spawn boulder event every 4 seconds
 
+INCREASE_GAME_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INCREASE_GAME_SPEED, 1000)
+
 
 # Create surfaces/images and rect
 menu_screen = pygame.image.load('assets/menu_background.png')
@@ -166,6 +169,8 @@ while RUN:
 
             if event.type == SPAWN_BOULDER:
                 create_boulder()
+            if event.type == INCREASE_GAME_SPEED:
+                GAME_SPEED += 0.05
 
             if event.type == pygame.KEYDOWN and not G1PAUSE:
                 if event.key == pygame.K_a:
