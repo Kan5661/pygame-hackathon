@@ -80,9 +80,8 @@ def draw_boulders():
     
     # Remove off screen  boulders
     for boulder in boulder_rects:
-        if boulder.x < -50:
+        if boulder.x < -100:
             boulder_rects.remove(boulder)
-    print(boulder_rects)
 
 
 def player_collision():
@@ -91,12 +90,8 @@ def player_collision():
         turtle = turtle_found
         G1PAUSE = True
         GAME_SPEED = 0
-        # MENU = True
-        # GAME1 = False
-        # player_rect.x, player_rect.y = 150, 110
 
     if player_rect.collidelist(boulder_rects) != -1:
-        
         player_rect.right = boulder_rects[player_rect.collidelist(boulder_rects)].left
 
 
@@ -107,6 +102,7 @@ def g1pause():
         display.blit(pause_screen, (200 - (pause_screen_rect.w / 2), 125 - (pause_screen_rect.h / 2)))
         display.blit(pause_menu, pause_menu_rect)
         display.blit(pause_play, pause_play_rect)
+        write_text(msg='Game Over!', color=(0, 0, 255), screen=display, location=(145, 80), font_size=30)
 
 
 def move_bg():

@@ -1,7 +1,7 @@
 import pygame
 
 
-def write_text(msg, color, screen, x, y):
-    font_style = pygame.font.SysFont(None, 50)
+def write_text(msg, color, screen, location, font_size):
+    font_style = pygame.font.SysFont(None, font_size)
     text = font_style.render(msg, True, color)
-    screen.blit(text, (x, y))
+    screen.blit(text, location)
