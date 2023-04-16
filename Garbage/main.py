@@ -2,6 +2,7 @@ import pygame
 import sys
 from utils import *
 import random
+import math
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -54,9 +55,22 @@ turtle_rect, turtle_rect.x, turtle_rect.y = turtle_seeking.get_rect(), 0, 0
 boulder_img = pygame.image.load('assets/boulder.png')
 pygame.Surface.set_colorkey(boulder_img, (255, 255, 255))
 
+splash_effects = [splash1, splash2, splash3, splash4] = [pygame.image.load('assets/effect/splash.png'), pygame.image.load('assets/effect/splash2.png'), pygame.image.load('assets/effect/splash3.png'), pygame.image.load('assets/effect/splash2.png')]
+splash_rect = splash1.get_rect()
+
+for effect in splash_effects:
+    pygame.Surface.set_colorkey(effect, (255, 255, 255))
+
 
 def draw_player():
+    global FRAME
+    FRAME += 2
+    if FRAME >= 60:
+        FRAME = 0
+    splash = splash_effects[math.floor(FRAME/15)]
+
     display.blit(player, player_rect)
+    display.blit(splash, (player_rect.centerx - splash_rect.w / 2, player_rect.centery - splash_rect.h / 2))
     player_rect.x += player_mov_x
     player_rect.y += player_mov_y
 
@@ -110,6 +124,12 @@ def player_collision():
             player_rect.left = boulder_collided.right + 1
         else:
             player_rect.right = boulder_collided.left - 1
+    if player_rect.top <= 5:
+        player_rect.top = 5
+    if player_rect.bottom >= 245:
+        player_rect.bottom = 245
+    if player_rect.right >= 395:
+        player_rect.right = 395
 
 
 def g1pause():
@@ -133,6 +153,7 @@ def move_bg():
 [RUN, MENU, GAME1, G1PAUSE] = [True, True, False, False]
 GAME_SPEED = 1
 SCORE = 0
+FRAME = 0
 player_mov_x, player_mov_y, player_speed = 0, 0, 2
 turtle = turtle_seeking
 boulder_rects = []
