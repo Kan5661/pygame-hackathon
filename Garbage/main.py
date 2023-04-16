@@ -58,6 +58,10 @@ pygame.Surface.set_colorkey(boulder_img, (255, 255, 255))
 splash_effects = [splash1, splash2, splash3, splash4] = [pygame.image.load('assets/effect/splash.png'), pygame.image.load('assets/effect/splash2.png'), pygame.image.load('assets/effect/splash3.png'), pygame.image.load('assets/effect/splash2.png')]
 splash_rect = splash1.get_rect()
 
+selection_arrow = pygame.image.load('assets/selection_arrow.png')
+selection_arrow_rect = selection_arrow.get_rect()
+pygame.Surface.set_colorkey(selection_arrow, (255, 255, 255))
+
 for effect in splash_effects:
     pygame.Surface.set_colorkey(effect, (255, 255, 255))
 
@@ -140,6 +144,8 @@ def g1pause():
         display.blit(pause_menu, pause_menu_rect)
         display.blit(pause_play, pause_play_rect)
         write_text(msg='Game Over!', color=(0, 0, 255), screen=display, location=(145, 80), font_size=30)
+        write_text('Menu', (255, 255, 255), display, (137, 115), 16)
+        write_text('Play', (255, 255, 255), display, (242, 115), 16)
 
 
 def move_bg():
@@ -168,6 +174,11 @@ while RUN:
         display.blit(bottle_select1, bottle_select1_rect)
         display.blit(bottle_select2, bottle_select2_rect)
         display.blit(playBtn, playBtn_rect)
+        if player ==  bottle1:
+            selection_arrow_x = bottle_select1_rect.centerx - selection_arrow_rect.w / 2
+        elif player == bottle2:
+            selection_arrow_x = bottle_select2_rect.centerx - selection_arrow_rect.w / 2
+        display.blit(selection_arrow, (selection_arrow_x, 80))
         display = pygame.transform.scale(display, (800, 500))  # make every thing scale by 2x
         screen.blit(display, (0, 0))
 
