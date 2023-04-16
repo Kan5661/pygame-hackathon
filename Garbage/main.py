@@ -22,6 +22,13 @@ menu_screen = pygame.image.load('assets/menu_background.png')
 game_bg = pygame.image.load('assets/game_bg.png')
 game_bg_rect, game_bg_rect.x, game_bg_rect.y = game_bg.get_rect(), 0, 0
 
+bottle_select1 = pygame.image.load('assets/bottle_select1.png')
+bottle_select1_rect, bottle_select1_rect.x, bottle_select1_rect.y = bottle_select1.get_rect(), 135, 100
+bottle_select2 = pygame.image.load('assets/bottle_select2.png')
+bottle_select2_rect, bottle_select2_rect.x, bottle_select2_rect.y = bottle_select2.get_rect(), 235, 100
+bottle2 = pygame.image.load('assets/bottle2.png')
+pygame.Surface.set_colorkey(bottle2, (255, 255, 255))
+
 pause_play = pygame.image.load('assets/pause_play.png')
 pause_play_rect, pause_play_rect.x, pause_play_rect.y = pause_play.get_rect(), 225, 130
 pause_menu = pygame.image.load('assets/pause_menu.png')
@@ -31,10 +38,11 @@ pause_screen_rect = pause_screen.get_rect()
 pygame.Surface.set_colorkey(pause_screen, (255, 255, 255))
 
 playBtn = pygame.image.load('assets/playBtn.png')
-playBtn_rect, playBtn_rect.x, playBtn_rect.y = playBtn.get_rect(), 150, 150
+playBtn_rect, playBtn_rect.x, playBtn_rect.y = playBtn.get_rect(), 145, 170
 
-player = pygame.image.load('assets/bottle1.png')
-pygame.Surface.set_colorkey(player, (255, 255, 255))  # set white rgb value to transparent
+bottle1 = pygame.image.load('assets/bottle1.png')
+player = bottle1
+pygame.Surface.set_colorkey(bottle1, (255, 255, 255))  # set white rgb value to transparent
 player_rect, player_rect.x, player_rect.y = player.get_rect(), 150, 110
 
 turtle_seeking = pygame.image.load('assets/bottle_searching_turtle.png')
@@ -85,11 +93,12 @@ def draw_boulders():
 
 
 def player_collision():
-    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects
+    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects, SCORE
     if player_rect.colliderect(turtle_rect):
         turtle = turtle_found
         G1PAUSE = True
         GAME_SPEED = 0
+        SCORE = 0
 
     if player_rect.collidelist(boulder_rects) != -1:
         boulder_collided = boulder_rects[player_rect.collidelist(boulder_rects)]
@@ -135,6 +144,8 @@ while RUN:
         # draw surfaces
         display = pygame.Surface((400, 250))
         display.blit(menu_screen, (0, 0))
+        display.blit(bottle_select1, bottle_select1_rect)
+        display.blit(bottle_select2, bottle_select2_rect)
         display.blit(playBtn, playBtn_rect)
         display = pygame.transform.scale(display, (800, 500))  # make every thing scale by 2x
         screen.blit(display, (0, 0))
@@ -149,6 +160,12 @@ while RUN:
                 GAME1 = True
                 MENU = False
                 G1PAUSE = False
+            if bottle_select1_rect.collidepoint((mouse_x_pos/2, mouse_y_pos/2)) and event.type == pygame.MOUSEBUTTONDOWN:
+                player = bottle1
+                print('select cola')
+            if bottle_select2_rect.collidepoint((mouse_x_pos/2, mouse_y_pos/2)) and event.type == pygame.MOUSEBUTTONDOWN:
+                player = bottle2
+                print('select water')
         clock.tick(60)
         pygame.display.update()
 
