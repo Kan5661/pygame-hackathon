@@ -14,7 +14,7 @@ SPAWN_BOULDER = pygame.USEREVENT
 pygame.time.set_timer(SPAWN_BOULDER, 4000)  # Trigger spawn boulder event every 4 seconds
 
 INCREASE_GAME_SPEED = pygame.USEREVENT + 1
-pygame.time.set_timer(INCREASE_GAME_SPEED, 1000)
+pygame.time.set_timer(INCREASE_GAME_SPEED, 20000)
 
 
 # Create surfaces/images and rect
@@ -92,7 +92,15 @@ def player_collision():
         GAME_SPEED = 0
 
     if player_rect.collidelist(boulder_rects) != -1:
-        player_rect.right = boulder_rects[player_rect.collidelist(boulder_rects)].left
+        boulder_collided = boulder_rects[player_rect.collidelist(boulder_rects)]
+        if boulder_collided.collidepoint(player_rect.midbottom):
+            player_rect.bottom = boulder_collided.top - 1
+        elif boulder_collided.collidepoint(player_rect.midtop):
+            player_rect.top = boulder_collided.bottom + 1
+        elif boulder_collided.collidepoint(player_rect.midleft):
+            player_rect.left = boulder_collided.right + 1
+        else:
+            player_rect.right = boulder_collided.left - 1
 
 
 def g1pause():
@@ -113,9 +121,10 @@ def move_bg():
 
 
 # Game States/variables
-[RUN, MENU, GAME1, GAME2, G1PAUSE, G2PAUSE] = [True, True, False, False, False, False]
+[RUN, MENU, GAME1, G1PAUSE] = [True, True, False, False]
 GAME_SPEED = 1
-player_mov_x, player_mov_y, player_speed = 0, 0, 1
+SCORE = 0
+player_mov_x, player_mov_y, player_speed = 0, 0, 2
 turtle = turtle_seeking
 boulder_rects = []
 boulder_spawn_locations = [0, 50, 100, 150, 200, 250]
@@ -152,12 +161,13 @@ while RUN:
         move_bg()
         player_collision()
         g1pause()
+        write_text(msg='Score: ' + str(SCORE), color=(0, 0, 0), location=(5, 5), screen=display, font_size=24)
+        SCORE += GAME_SPEED
 
         display = pygame.transform.scale(display, (800, 500))
         screen.blit(display, (0, 0))
         for event in pygame.event.get():
             mouse_x_pos, mouse_y_pos = pygame.mouse.get_pos()
-            print(mouse_x_pos, mouse_y_pos)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -166,7 +176,7 @@ while RUN:
             if event.type == SPAWN_BOULDER:
                 create_boulder()
             if event.type == INCREASE_GAME_SPEED:
-                GAME_SPEED += 0.05
+                GAME_SPEED += 0.5
 
             if event.type == pygame.KEYDOWN and not G1PAUSE:
                 if event.key == pygame.K_a:
@@ -203,5 +213,5 @@ while RUN:
                 GAME_SPEED = 1
                 boulder_rects = []
 
-        clock.tick(120)
+        clock.tick(60)
         pygame.display.update()
