@@ -71,7 +71,7 @@ def move(tile_rects, player, movement):
     hit_list = collision_test(player, tile_rects)
     for tile in hit_list:
         if movement[1] > 0:
-            player.bottom = tile.top
+            player.bottom = tile.top + 1
             collision_types['bottom'] = True
 #            delta_y = 0
         elif movement[1] < 0:
