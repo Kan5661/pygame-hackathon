@@ -7,7 +7,7 @@ import math
 pygame.init()
 clock = pygame.time.Clock()
 
-screen_size = [screen_width, screen_height] = [800, 500]
+screen_size = [screen_width, screen_height] = [800, 700]
 screen = pygame.display.set_mode(screen_size)
 
 # Event timer
@@ -89,13 +89,13 @@ def draw_turtle(turtle_img):
 
 def create_boulder():
     random.shuffle(boulder_spawn_locations)
-    number_of_boulders_to_spawn = random.randint(2, 4)
+    number_of_boulders_to_spawn = random.randint(3, 5)
 
     for i in range(number_of_boulders_to_spawn):
         boulder_rect = random.choice([boulder_img.get_rect(), floating_log.get_rect()])
         print(boulder_rect)
         boulder_rect.y = boulder_spawn_locations[i]
-        boulder_rect.x = random.randrange(500, 800, 50)
+        boulder_rect.x = random.randrange(700, 800, 50)
         boulder_rects.append(boulder_rect)
 
 
@@ -136,8 +136,8 @@ def player_collision():
             player_rect.right = boulder_collided.left - 1
     if player_rect.top <= 5:
         player_rect.top = 5
-    if player_rect.bottom >= 245:
-        player_rect.bottom = 245
+    if player_rect.bottom >= 345:
+        player_rect.bottom = 345
     if player_rect.right >= 395:
         player_rect.right = 395
 
@@ -163,7 +163,7 @@ def move_bg():
 
 # Game States/variables
 [RUN, MENU, GAME1, G1PAUSE] = [True, True, False, False]
-GAME_SPEED = 1
+GAME_SPEED = 4
 SCORE = 0
 FRAME = 0
 player_mov_x, player_mov_y, player_speed = 0, 0, 2
@@ -175,7 +175,7 @@ boulder_spawn_locations = [0, 50, 100, 150, 200, 250]
 while RUN:
     while MENU:
         # draw surfaces
-        display = pygame.Surface((400, 250))
+        display = pygame.Surface((400, 350))
         display.blit(menu_screen, (0, 0))
         display.blit(bottle_select1, bottle_select1_rect)
         display.blit(bottle_select2, bottle_select2_rect)
@@ -185,7 +185,7 @@ while RUN:
         elif player == bottle2:
             selection_arrow_x = bottle_select2_rect.centerx - selection_arrow_rect.w / 2
         display.blit(selection_arrow, (selection_arrow_x, 80))
-        display = pygame.transform.scale(display, (800, 500))  # make every thing scale by 2x
+        display = pygame.transform.scale(display, (800, 700))  # make every thing scale by 2x
         screen.blit(display, (0, 0))
 
         for event in pygame.event.get():
@@ -208,7 +208,7 @@ while RUN:
         pygame.display.update()
 
     while GAME1:
-        display = pygame.Surface((400, 250))
+        display = pygame.Surface((400, 350))
         display.blit(game_bg, game_bg_rect)
         draw_turtle(turtle_img=turtle)
         draw_player()
@@ -219,7 +219,7 @@ while RUN:
         write_text(msg='Score: ' + str(SCORE), color=(0, 0, 0), location=(5, 5), screen=display, font_size=24)
         SCORE += GAME_SPEED
 
-        display = pygame.transform.scale(display, (800, 500))
+        display = pygame.transform.scale(display, (800, 700))
         screen.blit(display, (0, 0))
         for event in pygame.event.get():
             mouse_x_pos, mouse_y_pos = pygame.mouse.get_pos()
@@ -259,13 +259,13 @@ while RUN:
                 MENU = True
                 turtle = turtle_seeking
                 player_rect.x, player_rect.y = 150, 110
-                GAME_SPEED = 1
+                GAME_SPEED = 4
                 boulder_rects = []
             if pause_play_rect.collidepoint((mouse_x_pos / 2, mouse_y_pos / 2)) and event.type == pygame.MOUSEBUTTONDOWN and G1PAUSE:
                 turtle = turtle_seeking
                 player_rect.x, player_rect.y = 150, 110
                 G1PAUSE = False
-                GAME_SPEED = 1
+                GAME_SPEED = 4
                 boulder_rects = []
 
         clock.tick(60)
