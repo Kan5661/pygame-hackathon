@@ -7,6 +7,7 @@ import math
 pygame.init()
 clock = pygame.time.Clock()
 
+
 screen_size = [screen_width, screen_height] = [800, 700]
 screen = pygame.display.set_mode(screen_size)
 
@@ -169,11 +170,14 @@ FRAME = 0
 player_mov_x, player_mov_y, player_speed = 0, 0, 2
 turtle = turtle_seeking
 boulder_rects = []
-boulder_spawn_locations = [0, 50, 100, 150, 200, 250]
+boulder_spawn_locations = [0, 50, 100, 150, 200, 250, 300, 350]
 
 
 while RUN:
     while MENU:
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load('assets/sounds/LudumDare30-Track6.wav')
+            pygame.mixer.music.play(-1)
         # draw surfaces
         display = pygame.Surface((400, 350))
         display.blit(menu_screen, (0, 0))
@@ -198,6 +202,8 @@ while RUN:
                 GAME1 = True
                 MENU = False
                 G1PAUSE = False
+                pygame.mixer.music.stop()
+                pygame.mixer.music.unload()
             if bottle_select1_rect.collidepoint((mouse_x_pos/2, mouse_y_pos/2)) and event.type == pygame.MOUSEBUTTONDOWN:
                 player = bottle1
                 print('select cola')
@@ -208,6 +214,9 @@ while RUN:
         pygame.display.update()
 
     while GAME1:
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load('assets/sounds/CalmRock.wav')
+            pygame.mixer.music.play(-1)
         display = pygame.Surface((400, 350))
         display.blit(game_bg, game_bg_rect)
         draw_turtle(turtle_img=turtle)
@@ -257,6 +266,8 @@ while RUN:
                 GAME1 = False
                 G1PAUSE = False
                 MENU = True
+                pygame.mixer.music.stop()
+                pygame.mixer.music.unload()
                 turtle = turtle_seeking
                 player_rect.x, player_rect.y = 150, 110
                 GAME_SPEED = 4
