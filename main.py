@@ -39,7 +39,7 @@ pause_screen_rect = pause_screen.get_rect()
 pygame.Surface.set_colorkey(pause_screen, (255, 255, 255))
 
 playBtn = pygame.image.load('assets/playBtn.png')
-playBtn_rect, playBtn_rect.x, playBtn_rect.y = playBtn.get_rect(), 145, 170
+playBtn_rect, playBtn_rect.x, playBtn_rect.y = playBtn.get_rect(), 145, 250
 
 bottle1 = pygame.image.load('assets/bottle1.png')
 player = bottle1
