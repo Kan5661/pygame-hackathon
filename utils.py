@@ -1,9 +1,7 @@
-import pygame as py
-import time
-import sys
+import pygame
 
-#message when leaving the game
-def message(msg,color, screen, screen_width, screen_height):
-    font_style = py.font.SysFont(None, 50)
-    mesg = font_style.render(msg, True, color)
-    screen.blit(mesg, [screen_width/2 - 100, screen_height/2])
+
+def write_text(msg, color, screen, location, font_size):
+    font_style = pygame.font.SysFont(None, font_size)
+    text = font_style.render(msg, True, color)
+    screen.blit(text, location)
