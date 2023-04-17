@@ -43,9 +43,9 @@ playBtn = pygame.image.load('assets/playBtn.png')
 playBtn_rect, playBtn_rect.x, playBtn_rect.y = playBtn.get_rect(), 145, 250
 
 bottle1 = pygame.image.load('assets/bottle1.png')
-player = bottle1
+player = bottle2
 pygame.Surface.set_colorkey(bottle1, (255, 255, 255))  # set white rgb value to transparent
-player_rect, player_rect.x, player_rect.y = player.get_rect(), 150, 110
+player_rect, player_rect.x, player_rect.y = player.get_rect(), 150, 160
 
 turtle_seeking = pygame.image.load('assets/bottle_searching_turtle.png')
 turtle_found = pygame.image.load('assets/bottle_eaten_turtle.png')
@@ -269,12 +269,12 @@ while RUN:
                 pygame.mixer.music.stop()
                 pygame.mixer.music.unload()
                 turtle = turtle_seeking
-                player_rect.x, player_rect.y = 150, 110
+                player_rect.x, player_rect.y = 150, 160
                 GAME_SPEED = 4
                 boulder_rects = []
             if pause_play_rect.collidepoint((mouse_x_pos / 2, mouse_y_pos / 2)) and event.type == pygame.MOUSEBUTTONDOWN and G1PAUSE:
                 turtle = turtle_seeking
-                player_rect.x, player_rect.y = 150, 110
+                player_rect.x, player_rect.y = 150, 160
                 G1PAUSE = False
                 GAME_SPEED = 4
                 boulder_rects = []
