@@ -53,7 +53,10 @@ pygame.Surface.set_colorkey(turtle_found, (255, 255, 255))
 turtle_rect, turtle_rect.x, turtle_rect.y = turtle_seeking.get_rect(), 0, 0
 
 boulder_img = pygame.image.load('assets/boulder.png')
+floating_log = pygame.image.load('assets/floating_log.png')
 pygame.Surface.set_colorkey(boulder_img, (255, 255, 255))
+pygame.Surface.set_colorkey(floating_log, (255, 255, 255))
+
 
 splash_effects = [splash1, splash2, splash3, splash4] = [pygame.image.load('assets/effect/splash.png'), pygame.image.load('assets/effect/splash2.png'), pygame.image.load('assets/effect/splash3.png'), pygame.image.load('assets/effect/splash2.png')]
 splash_rect = splash1.get_rect()
@@ -89,7 +92,8 @@ def create_boulder():
     number_of_boulders_to_spawn = random.randint(2, 4)
 
     for i in range(number_of_boulders_to_spawn):
-        boulder_rect = boulder_img.get_rect()
+        boulder_rect = random.choice([boulder_img.get_rect(), floating_log.get_rect()])
+        print(boulder_rect)
         boulder_rect.y = boulder_spawn_locations[i]
         boulder_rect.x = random.randrange(500, 800, 50)
         boulder_rects.append(boulder_rect)
@@ -102,8 +106,10 @@ def draw_boulders():
 
     # Draw boulder
     for boulder_position in boulder_rects:
-        display.blit(boulder_img, boulder_position)
-    
+        if boulder_position.w == floating_log.get_rect().width:
+            display.blit(floating_log, boulder_position)
+        if boulder_position.w == boulder_img.get_rect().width:
+            display.blit(boulder_img, boulder_position)
     # Remove off screen  boulders
     for boulder in boulder_rects:
         if boulder.x < -100:
