@@ -71,21 +71,21 @@ for effect in splash_effects:
 
 
 def draw_player():
-    global FRAME
-    FRAME += 2
-    if FRAME >= 60:
-        FRAME = 0
-    splash = splash_effects[math.floor(FRAME/15)]
-
     display.blit(player, player_rect)
-    display.blit(splash, (player_rect.centerx - splash_rect.w / 2, player_rect.centery - splash_rect.h / 2))
     player_rect.x += player_mov_x
     player_rect.y += player_mov_y
 
 
 def draw_turtle(turtle_img):
+    global FRAME
+    FRAME += 2
+    if FRAME >= 60:
+        FRAME = 0
+    splash = splash_effects[math.floor(FRAME/15)]
     turtle_rect.y = player_rect.y - turtle_rect.h / 2
     display.blit(turtle_img, turtle_rect)
+    display.blit(splash, (turtle_rect.right - 10, turtle_rect.y - 20))
+    # display.blit(splash, (turtle_rect.centerx - splash_rect.w / 2, turtle_rect.centery - splash_rect.h / 2))
 
 
 def create_boulder():
@@ -118,11 +118,14 @@ def draw_boulders():
 
 
 def player_collision():
-    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects, SCORE
+    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects, SCORE, HIGH_SCORE, player_rect, turtle_rect
     if player_rect.colliderect(turtle_rect):
         turtle = turtle_found
         G1PAUSE = True
+        player_rect.x = turtle_rect.right + 10
         GAME_SPEED = 0
+        if SCORE > HIGH_SCORE:
+            HIGH_SCORE = SCORE
         SCORE = 0
 
     if player_rect.collidelist(boulder_rects) != -1:
@@ -166,6 +169,7 @@ def move_bg():
 [RUN, MENU, GAME1, G1PAUSE] = [True, True, False, False]
 GAME_SPEED = 4
 SCORE = 0
+HIGH_SCORE = 0
 FRAME = 0
 player_mov_x, player_mov_y, player_speed = 0, 0, 2
 turtle = turtle_seeking
@@ -184,6 +188,7 @@ while RUN:
         display.blit(bottle_select1, bottle_select1_rect)
         display.blit(bottle_select2, bottle_select2_rect)
         display.blit(playBtn, playBtn_rect)
+        write_text('High Score: ' + str(HIGH_SCORE), (255, 255, 255), display, (140, 160), 24)
         if player ==  bottle1:
             selection_arrow_x = bottle_select1_rect.centerx - selection_arrow_rect.w / 2
         elif player == bottle2:
