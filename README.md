@@ -5,8 +5,11 @@ This game is good for schools, where kids could play it and learn about the impo
 
 ### Prerequisites
 
-The project runs using the pygame library.
 pip install pygame
+
+pip install mixer
+
+sudo apt-get install -y libsdl2-mixer-2.0-0
 
 ### How to run it
 
