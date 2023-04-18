@@ -21,3 +21,5 @@ python3 main.py
 You can move around the maze with ``W`` ``A`` ``S`` ``D``. 
 
 To exit the game, press ``ESC`` or click the red cross.
+
+![gif](https://i.imgur.com/jN5z7rd.gif)
