@@ -118,11 +118,13 @@ def draw_boulders():
 
 
 def player_collision():
-    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects, SCORE
+    global GAME1, MENU, player_mov_x, player_mov_y, turtle, G1PAUSE, GAME_SPEED, boulder_rects, SCORE, HIGH_SCORE
     if player_rect.colliderect(turtle_rect):
         turtle = turtle_found
         G1PAUSE = True
         GAME_SPEED = 0
+        if SCORE > HIGH_SCORE:
+            HIGH_SCORE = SCORE
         SCORE = 0
 
     if player_rect.collidelist(boulder_rects) != -1:
@@ -166,6 +168,7 @@ def move_bg():
 [RUN, MENU, GAME1, G1PAUSE] = [True, True, False, False]
 GAME_SPEED = 4
 SCORE = 0
+HIGH_SCORE = 0
 FRAME = 0
 player_mov_x, player_mov_y, player_speed = 0, 0, 2
 turtle = turtle_seeking
@@ -184,6 +187,7 @@ while RUN:
         display.blit(bottle_select1, bottle_select1_rect)
         display.blit(bottle_select2, bottle_select2_rect)
         display.blit(playBtn, playBtn_rect)
+        write_text('High Score: ' + str(HIGH_SCORE), (255, 255, 255), display, (140, 160), 24)
         if player ==  bottle1:
             selection_arrow_x = bottle_select1_rect.centerx - selection_arrow_rect.w / 2
         elif player == bottle2:
