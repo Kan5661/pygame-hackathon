@@ -94,7 +94,6 @@ def create_boulder():
 
     for i in range(number_of_boulders_to_spawn):
         boulder_rect = random.choice([boulder_img.get_rect(), floating_log.get_rect()])
-        print(boulder_rect)
         boulder_rect.y = boulder_spawn_locations[i]
         boulder_rect.x = random.randrange(700, 800, 50)
         boulder_rects.append(boulder_rect)
